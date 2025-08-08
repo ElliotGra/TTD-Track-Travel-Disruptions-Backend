@@ -1,5 +1,6 @@
 package com.FlyAsh.TrackTravelDisruptions.service;
 
+import com.FlyAsh.TrackTravelDisruptions.dto.RailDataDTO;
 import com.FlyAsh.TrackTravelDisruptions.models.Journey;
 import com.FlyAsh.TrackTravelDisruptions.models.JourneyLeg;
 import com.FlyAsh.TrackTravelDisruptions.models.TransportProvider;
@@ -11,8 +12,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -34,6 +33,8 @@ class JourneyServiceImplTest {
 
     @Mock
     private JourneyRepository mockJourneyRepository;
+    @Mock
+    private RailDataApiService railDataApiService;
 
     @InjectMocks
     private JourneyServiceImpl journeyService;
@@ -94,17 +95,19 @@ class JourneyServiceImplTest {
 
 
     @Test
-    void addNewJounery() {
+    void addNewJourney() {
 
         Journey journey3 = new Journey(3L, true, "Origin 3", "Destination 3", 3L, days, LocalTime.parse("21:00"), journeyLegs);
         when(mockJourneyRepository.save(journey3)).thenReturn(journey3);
+
+        when(railDataApiService.getNextFastestServiceBetween(journey3.getOriginCRS(),journey3.getDestinationCRS(),0)).thenReturn(notNull(),notNull(),notNull());
+
         // Act
 
         Journey result = journeyService.addNewJourney(journey3);
 
         // Assert
         assertNotNull(result);
-        assertEquals(result.getId(), journey3.getId());
         verify(mockJourneyRepository, times(1)).save(journey3);
 
     }

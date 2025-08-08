@@ -71,7 +71,7 @@ class JourneyControllerTest {
     public void setup() {
         mockMvcController = MockMvcBuilders.standaloneSetup(journeyController).build();
 
-        journey1Dto = new JourneyDTO(1L,"OXF", "PAD", LocalTime.parse("08:00"), days, true);
+        journey1Dto = new JourneyDTO(1L,1L,"OXF", "PAD", LocalTime.parse("08:00"), days, true);
 
         journey1 = new Journey(1L, true, "Origin 1", "Destination 1", 1L, days, LocalTime.parse("08:00"), journeyLegs);
         journey2 = new Journey(2L, false, "Origin 2", "Destination 2", 2L, days, LocalTime.parse("09:30:10"), journeyLegs);
